@@ -1,0 +1,22 @@
+{
+  "view/VendorPortalMain.view.xml": 1727955655720,
+  "model/models.js": 1727954898102,
+  "controller/VendorPortalMain.controller.js": 1727955690364,
+  "controller/App.controller.js": 1727954898102,
+  "manifest.json": 1727975648201,
+  "Component.js": 1727954898094,
+  "Component-dbg.js": 1727954898094,
+  "Component.js.map": 1727975648306,
+  "controller/VendorPortalMain-dbg.controller.js": 1727955690364,
+  "controller/VendorPortalMain.controller.js.map": 1727975648305,
+  "controller/App-dbg.controller.js": 1727954898102,
+  "controller/App.controller.js.map": 1727975648305,
+  "model/models-dbg.js": 1727954898102,
+  "model/models.js.map": 1727975648305,
+  "Component-preload.js": 1727975648366,
+  "Component-preload.js.map": 1727975648366,
+  "i18n/i18n.properties": 1727954932962,
+  "view/App.view.xml": 1727954898106,
+  "css/style.css": 1727954898106,
+  "index.html": 1727954898094
+}

@@ -7,13 +7,23 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^7.2.1",
-    "@sap/cds-dk": "^7.9.8",
-    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "@sap/cds-dk": "^8.3.0",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.7",
     "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+    "@sap/hana-client": "^2.16.21",
+    "@sap/hdbext": "^7.7.3",
+    "@sap/textbundle": "^4.2.0",
+    "@sap/xsenv": "^3.4.0",
+    "@sap/xssec": "^3.6.1",
     "@sapui5/ts-types": "^1.92.2",
+    "axios": "^1.7.7",
+    "cfenv": "^1.2.4",
     "eslint": "^7.32.0",
     "express": "^4",
-    "@cap-js/hana": "^1"
+    "hdb": "^0.19.7",
+    "passport": "^0.6.0",
+    "sap-cf-axios": "^1.0.2",
+    "sap-hdbext-promisfied": "^2.202304.2"
   },
   "devDependencies": {
     "@sap/ux-specification": "UI5-1.128",
@@ -39,9 +49,9 @@
           "strategy": "JWT"
         }
       }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
     }
-  },
-   "hana": {
-    "deploy-format": "hdbtable"
   }
 }

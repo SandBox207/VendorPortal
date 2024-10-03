@@ -3,89 +3,133 @@ ID: ADNOC-ADD-VP
 description: A simple CAP project.
 version: 1.0.0
 modules:
-  - name: ADNOC-ADD-VP-srv
-    type: nodejs
-    path: gen/srv
-    requires:
-      - name: ADNOC-ADD-VP-db
-    provides:
-      - name: srv-api
-        properties:
-          srv-url: ${default-url}
-    parameters:
-      buildpack: nodejs_buildpack
-      readiness-health-check-http-endpoint: /health
-      readiness-health-check-type: http
-    build-parameters:
-      builder: npm
-  - name: ADNOC-ADD-VP-db-deployer
-    type: hdb
-    path: gen/db
-    requires:
-      - name: ADNOC-ADD-VP-db
-    parameters:
-      buildpack: nodejs_buildpack
-  - name: ADNOC-ADD-VP-app-content
-    type: com.sap.application.content
-    path: .
-    requires:
-      - name: ADNOC-ADD-VP-repo-host
-        parameters:
-          content-target: true
-    build-parameters:
-      build-result: resources
-      requires:
-        - artifacts:
-            - aeaddadnocvendorportal.zip
-          name: aeaddadnocvendorportal
-          target-path: resources/
-  - name: aeaddadnocvendorportal
-    type: html5
-    path: app/vendorportal
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build:cf
-      supported-platforms:
-        []
-resources:
+- name: ADNOC-ADD-VP-srv
+  type: nodejs
+  path: gen/srv
+  requires:
   - name: ADNOC-ADD-VP-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-  - name: ADNOC-ADD-VP-repo-host
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: html5-apps-repo
-      service-name: ADNOC-ADD-VP-html5-srv
-      service-plan: app-host
+  - name: uaa_ADNOC-ADD-VP
   - name: ADNOC-ADD-VP-destination-service
-    type: org.cloudfoundry.managed-service
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    readiness-health-check-http-endpoint: /health
+    readiness-health-check-type: http
+  build-parameters:
+    builder: npm
+- name: ADNOC-ADD-VP-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: ADNOC-ADD-VP-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: ADNOC-ADD-VP-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ADNOC-ADD-VP-repo-host
     parameters:
-      config:
-        HTML5Runtime_enabled: false
-        init_data:
-          instance:
-            destinations:
-              - Authentication: NoAuthentication
-                Name: ui5
-                ProxyType: Internet
-                Type: HTTP
-                URL: https://ui5.sap.com
-            existing_destinations_policy: update
-        version: 1.0.0
-      service: destination
-      service-name: ADNOC-ADD-VP-destination-service
-      service-plan: lite
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - aeaddadnocvendorportal.zip
+      name: aeaddadnocvendorportal
+      target-path: resources/
+- name: aeaddadnocvendorportal
+  type: html5
+  path: app/vendorportal
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: ADNOC-ADD-VP-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: ADNOC-ADD-VP-destination-service
+    parameters:
+      content-target: true
+  - name: ADNOC-ADD-VP-repo-host
+    parameters:
+      service-key:
+        name: ADNOC-ADD-VP-repo-host-key
+  - name: uaa_ADNOC-ADD-VP
+    parameters:
+      service-key:
+        name: uaa_ADNOC-ADD-VP-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: vendorportal_ADNOC_ADD_VP_repo_host
+          ServiceInstanceName: ADNOC-ADD-VP-html5-srv
+          ServiceKeyName: ADNOC-ADD-VP-repo-host-key
+          sap.cloud.service: vendorportal
+        - Authentication: OAuth2UserTokenExchange
+          Name: vendorportal_uaa_ADNOC_ADD_VP
+          ServiceInstanceName: ADNOC-ADD-VP-xsuaa-service
+          ServiceKeyName: uaa_ADNOC-ADD-VP-key
+          sap.cloud.service: vendorportal
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: ADNOC-ADD-VP-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-name: ZADNOC_ADD_VP 
+    service-plan: hdi-shared
+    config:
+      schema: ZADNOC_ADD_VP
+- name: ADNOC-ADD-VP-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ADNOC-ADD-VP-html5-srv
+    service-plan: app-host
+- name: ADNOC-ADD-VP-destination-service
+  type: org.cloudfoundry.managed-service
+  requires:
+    - name: srv-api
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.ForwardAuthToken: true
+            Name: vendorportal-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ADNOC-ADD-VP-destination-service
+    service-plan: lite
+- name: uaa_ADNOC-ADD-VP
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ADNOC-ADD-VP-xsuaa-service
+    service-plan: application
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npm ci
-        - npx cds build --production
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production
