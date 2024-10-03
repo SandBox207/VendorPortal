@@ -1,0 +1,47 @@
+{
+  "name": "ADNOC-ADD-VP",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7.2.1",
+    "@sap/cds-dk": "^7.9.8",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+    "@sapui5/ts-types": "^1.92.2",
+    "eslint": "^7.32.0",
+    "express": "^4",
+    "@cap-js/hana": "^1"
+  },
+  "devDependencies": {
+    "@sap/ux-specification": "UI5-1.128",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-vendorportal": "cds watch --open vendorportal/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy ADNOC-ADD-VP --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "hana"
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      },
+      "auth": {
+        "passport": {
+          "strategy": "JWT"
+        }
+      }
+    }
+  },
+   "hana": {
+    "deploy-format": "hdbtable"
+  }
+}

@@ -1,0 +1,1 @@
+using VendorPortalService as service from '../../srv/vendorportal-service';
