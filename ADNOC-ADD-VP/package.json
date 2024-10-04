@@ -26,6 +26,7 @@
     "sap-hdbext-promisfied": "^2.202304.2"
   },
   "devDependencies": {
+    "@sap/hdi-deploy": "4.9.5",
     "@sap/ux-specification": "UI5-1.128",
     "rimraf": "^5.0.5"
   },

@@ -17,11 +17,11 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "v2/odata/v4/vendor-portal/",
+        "uri": "srv-api/v2/odata/v4/vendor-portal/",
         "type": "OData",
         "settings": {
           "annotations": [],
-          "odataVersion": "4.0"
+          "odataVersion": "2.0"
         }
       }
     },

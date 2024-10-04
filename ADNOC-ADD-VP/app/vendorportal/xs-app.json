@@ -15,6 +15,14 @@
       "destination": "ui5"
     },
     {
+      "source": "^/srv-api/(.*)$",
+      "target": "$1",
+      "authenticationType": "xsuaa",
+      "destination" : "vendorportal-srv-api",
+      "csrfProtection" : false,
+      "scope" : "uaa.user"
+    },
+    {
       "source": "^(.*)$",
       "target": "$1",
       "service": "html5-apps-repo-rt",
